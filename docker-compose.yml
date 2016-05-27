@@ -1,0 +1,23 @@
+version: "2"
+
+services:
+  node:
+    image: node:6.0.0
+    environment:
+        REDIS_PORT: 6379
+        REDIS_HOST: redis
+    volumes:
+      - .:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
+    ports:
+      - "3000:3000"
+    links:
+      - redis
+    working_dir: /usr/src/app
+    command: npm start
+
+  redis:
+    image: redis
+
+volumes:
+  node_modules:
