@@ -11,7 +11,7 @@ const matchEngine = new MatchEngine(
 const TinEyeAddQueue = require('../lib/tineye_add_queue.js')
 const queue = new TinEyeAddQueue(matchEngine)
 
-/* ADD a photo to TinEye */
+/* Add a photo to the TinEye index */
 router.post('/add', function(req, res) {
   const data = {
     url: req.body.url,
