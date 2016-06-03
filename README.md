@@ -15,10 +15,20 @@ Please make sure you have [Docker Toolbox](https://github.com/docker/toolbox/rel
 docker-compose run --rm node npm i
 docker-compose run --rm --service-ports node
 
-# Send a request
+# Add an image
 curl -H "Content-Type: application/json" \
     -X POST \
-    -d '{"image":{"url":"image_url","path":"image_path"}}' `docker-machine ip`:3000/photos/add
+    -d '{"url":"http://tineye.com/images/meloncat.jpg","filepath":"meloncat.jpg"}' `docker-machine ip`:3000/photos/add
+
+# Search for the added image
+curl -H "Content-Type: application/json" \
+    -X POST \
+    -d '{"image_url":"http://tineye.com/images/meloncat.jpg"}' `docker-machine ip`:3000/photos/search
+
+# Delete the added image
+curl -H "Content-Type: application/json" \
+    -X POST \
+    -d '{"filepath":"meloncat.jpg"}' `docker-machine ip`:3000/photos/delete
 ```
 
 ### Testing
