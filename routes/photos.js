@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const queue = require('../lib/tineye_add_queue.js')
 
 const {MatchEngine} = require('tineye-matchengine')
 const matchEngine = new MatchEngine(
@@ -8,6 +7,9 @@ const matchEngine = new MatchEngine(
   process.env.TINEYE_PASSWORD,
   process.env.TINEYE_BASE_URL
 )
+
+const TinEyeAddQueue = require('../lib/tineye_add_queue.js')
+const queue = new TinEyeAddQueue(matchEngine)
 
 /* ADD a photo to TinEye */
 router.post('/add', function(req, res) {
