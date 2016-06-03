@@ -1,12 +1,29 @@
 const express = require('express')
 const router = express.Router()
+const got = require('got')
+
+const {MatchEngine} = require('tineye-matchengine')
+const matchEngine = new MatchEngine(
+  process.env.TINEYE_USERNAME,
+  process.env.TINEYE_PASSWORD,
+  process.env.TINEYE_BASE_URL
+)
+
 const kue = require('kue')
 const queue = kue.createQueue({
   prefix: 'photo_add_queue',
   redis: {
-    port: process.env.REDIS_PORT,
-    host: process.env.REDIS_HOST
+    port: process.env.REDIS_PORT || 6379,
+    host: process.env.REDIS_HOST || localhost
   }
+})
+
+queue.process('add_photo', function(job, done) {
+  matchEngine.add({url: job.data.url, filepath: job.data.filepath}, function(err, data) {
+    job.data.processed = Date.now()
+    job.data.response = data
+    done(null, job.data)
+  })
 })
 
 queue.on('job complete', function(id) {
@@ -14,39 +31,40 @@ queue.on('job complete', function(id) {
     if (err) return
     job.remove(function(err){
       if (err) throw err
-      //console.log('removed completed job #%d', job.id)
     })
   })
 })
 
-queue.process('add_photo', function(job, done) {
-  add_photo(job.data, done)
-})
-
-function add_photo(job_data, done) {
-  // TODO: Actual TinEye API integration
-  job_data.processed = Date.now()
-  done(null, JSON.stringify(job_data))
-}
-
 /* ADD a photo to TinEye */
 router.post('/add', function(req, res) {
-  const image = req.body.image
-  const image_url = image.url
-  const image_path = image.path
-
   const job = queue.create('add_photo', {
-    image_url: image_url,
-    image_path: image_path,
+    url: req.body.url,
+    filepath: req.body.filepath,
     queued: Date.now(),
-    processed: null
+    processed: null,
+    response: {}
   }).save(function(err) {
     if (err) console.log(err)
   })
 
   job.on('complete', function(result) {
-    console.log(result)
     res.send(result)
+  })
+})
+
+/* Delete an image from the TinEye index */
+router.post('/delete', function(req, res) {
+  matchEngine.delete({filepath: req.body.filepath}, function(err, data) {
+    const response = data || err
+    res.send(response)
+  })
+})
+
+/* Search the TinEye index for an image */
+router.post('/search', function(req, res) {
+  matchEngine.search({image_url: req.body.image_url}, function(err, data) {
+    const response = data || err
+    res.send(response)
   })
 })
 
