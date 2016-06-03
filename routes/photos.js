@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const got = require('got')
+const queue = require('../lib/tineye_add_queue.js')
 
 const {MatchEngine} = require('tineye-matchengine')
 const matchEngine = new MatchEngine(
@@ -9,44 +9,16 @@ const matchEngine = new MatchEngine(
   process.env.TINEYE_BASE_URL
 )
 
-const kue = require('kue')
-const queue = kue.createQueue({
-  prefix: 'photo_add_queue',
-  redis: {
-    port: process.env.REDIS_PORT || 6379,
-    host: process.env.REDIS_HOST || localhost
-  }
-})
-
-queue.process('add_photo', function(job, done) {
-  matchEngine.add({url: job.data.url, filepath: job.data.filepath}, function(err, data) {
-    job.data.processed = Date.now()
-    job.data.response = data
-    done(null, job.data)
-  })
-})
-
-queue.on('job complete', function(id) {
-  kue.Job.get(id, function(err, job){
-    if (err) return
-    job.remove(function(err){
-      if (err) throw err
-    })
-  })
-})
-
 /* ADD a photo to TinEye */
 router.post('/add', function(req, res) {
-  const job = queue.create('add_photo', {
+  const data = {
     url: req.body.url,
     filepath: req.body.filepath,
     queued: Date.now(),
     processed: null,
     response: {}
-  }).save(function(err) {
-    if (err) console.log(err)
-  })
-
+  }
+  const job = queue.add(data)
   job.on('complete', function(result) {
     res.send(result)
   })
