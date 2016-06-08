@@ -26,6 +26,14 @@ router.post('/add', function(req, res) {
   })
 })
 
+/* Compare two images and return the match score (if any) */
+router.post('/compare', function(req, res) {
+  matchEngine.compare({url1: req.body.url1, url2: req.body.url2}, function(err, data) {
+    const response = data || err
+    res.send(response)
+  })
+})
+
 /* Delete an image from the TinEye index */
 router.post('/delete', function(req, res) {
   matchEngine.delete({filepath: req.body.filepath}, function(err, data) {
