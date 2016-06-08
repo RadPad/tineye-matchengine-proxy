@@ -26,6 +26,14 @@ router.post('/add', function(req, res) {
   })
 })
 
+/* Get the number of items currently in the collection */
+router.get('/count', function(req, res) {
+  matchEngine.count(function(err, data) {
+    const response = data || err
+    res.send(response)
+  })
+})
+
 /* Compare two images and return the match score (if any) */
 router.post('/compare', function(req, res) {
   matchEngine.compare({url1: req.body.url1, url2: req.body.url2}, function(err, data) {
@@ -37,6 +45,14 @@ router.post('/compare', function(req, res) {
 /* Delete an image from the TinEye index */
 router.post('/delete', function(req, res) {
   matchEngine.delete({filepath: req.body.filepath}, function(err, data) {
+    const response = data || err
+    res.send(response)
+  })
+})
+
+/* Check whether the MatchEngine search server is running */
+router.get('/ping', function(req, res) {
+  matchEngine.ping(function(err, data) {
     const response = data || err
     res.send(response)
   })
