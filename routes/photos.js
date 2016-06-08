@@ -51,7 +51,7 @@ router.post('/compare', function(req, res) {
 })
 
 /* Delete an image from the TinEye index */
-router.post('/delete', function(req, res) {
+router.delete('/delete', function(req, res) {
   matchEngine.delete({filepath: req.body.filepath}, function(err, data) {
     const response = data || err
     res.send(response)
