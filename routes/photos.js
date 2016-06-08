@@ -11,6 +11,14 @@ const matchEngine = new MatchEngine(
 const TinEyeAddQueue = require('../lib/tineye_add_queue.js')
 const queue = new TinEyeAddQueue(matchEngine)
 
+router.get('/', function(req, res) {
+  res.send('~(=^‥^)_旦~ < tineye tea time?')
+})
+
+router.get('/alive', function(req, res) {
+  res.send('alive')
+})
+
 /* Add a photo to the TinEye index */
 router.post('/add', function(req, res) {
   const data = {
