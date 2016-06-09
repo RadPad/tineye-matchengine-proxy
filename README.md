@@ -47,29 +47,35 @@ curl -H "Content-Type: application/json" \
     -H "Authorization: Basic dXNlcm5hbWU6UEBzc3cwcmQ=" \
     -X POST \
     -d '{"url":"http://tineye.com/images/meloncat.jpg","filepath":"meloncat.jpg"}' localhost:3000/api/photos/add
+# Output: {"status":"ok","error":[],"method":"add","result":[]}
 
 # Search for the added image
 curl -H "Content-Type: application/json" \
     -H "Authorization: Basic dXNlcm5hbWU6UEBzc3cwcmQ=" \
     -X POST \
     -d '{"url":"http://tineye.com/images/meloncat.jpg"}' localhost:3000/api/photos/search
+# Output: {"status":"ok","error":[],"method":"search","result":[{"score":"100.00","target_overlap_percent":"100.00","query_overlap_percent":"100.00","filepath":"meloncat.jpg"}]}
 
 # Delete the added image
 curl -H "Content-Type: application/json" \
     -H "Authorization: Basic dXNlcm5hbWU6UEBzc3cwcmQ=" \
     -X DELETE localhost:3000/api/photos/delete?filepath=meloncat.jpg
+# Output: {"status":"ok","error":[],"method":"delete","result":[]}
 
 # Compare two images
 curl -H "Content-Type: application/json" \
     -H "Authorization: Basic dXNlcm5hbWU6UEBzc3cwcmQ=" \
     -X POST \
     -d '{"url1":"http://tineye.com/images/meloncat.jpg","url2":"http://tineye.com/images/meloncat.jpg"}' localhost:3000/api/photos/compare
+# Output: {"status":"ok","error":[],"method":"compare","result":[{"target_overlap_percent":"100.00","score":"100.00","match_percent":"100.00","query_overlap_percent":"99.99"}]}
 
 # Get the image count of your index
 curl -X GET localhost:3000/api/photos/count
+# Output: {"status":"ok","error":[],"method":"count","result":[19156]}
 
 # Get the status of the TinEye service
 curl -X GET localhost:3000/api/photos/ping
+# Output: {"status":"ok","error":[],"method":"ping","result":[]}
 ```
 
 ## Testing
