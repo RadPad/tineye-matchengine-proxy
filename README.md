@@ -11,7 +11,7 @@ A micro-service interface to [Tineye](https://www.tineye.com/)
 
 The required environment variables are listed in `.env.dev`. Set your custom
 environment variables and run the following:
-```
+```bash
 npm i
 npm start
 ```
@@ -29,19 +29,19 @@ using Docker Compose, put all custom values in `.env.local` (this file needs
 ### Running the app
 
 With Docker Compose:
-```
+```bash
 docker-compose run --rm node npm i
 docker-compose run --rm --service-ports node
 ```
 
 Without Docker:
-```
+```bash
 npm i
 npm start
 ```
 
 Testing the API:
-```
+```bash
 # Add an image
 curl -H "Content-Type: application/json" \
     -H "Authorization: Basic dXNlcm5hbWU6UEBzc3cwcmQ=" \
