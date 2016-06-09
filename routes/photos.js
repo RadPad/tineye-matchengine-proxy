@@ -1,5 +1,7 @@
 const express = require('express')
 const router = express.Router()
+const auth = require('basicauth-middleware')
+const basicAuth = auth(process.env.HTTP_USERNAME, process.env.HTTP_PASSWORD)
 
 const {MatchEngine} = require('tineye-matchengine')
 const matchEngine = new MatchEngine(
@@ -20,7 +22,7 @@ router.get('/alive', function(req, res) {
 })
 
 /* Add a photo to the TinEye index */
-router.post('/add', function(req, res) {
+router.post('/add', basicAuth, function(req, res) {
   const data = {
     url: req.body.url,
     filepath: req.body.filepath,
@@ -43,7 +45,7 @@ router.get('/count', function(req, res) {
 })
 
 /* Compare two images and return the match score (if any) */
-router.post('/compare', function(req, res) {
+router.post('/compare', basicAuth, function(req, res) {
   matchEngine.compare({url1: req.body.url1, url2: req.body.url2}, function(err, data) {
     const response = data || err
     res.send(response)
@@ -51,7 +53,7 @@ router.post('/compare', function(req, res) {
 })
 
 /* Delete an image from the TinEye index */
-router.delete('/delete', function(req, res) {
+router.delete('/delete', basicAuth, function(req, res) {
   matchEngine.delete({filepath: req.query.filepath}, function(err, data) {
     const response = data || err
     res.send(response)
@@ -67,7 +69,7 @@ router.get('/ping', function(req, res) {
 })
 
 /* Search the TinEye index for an image */
-router.post('/search', function(req, res) {
+router.post('/search', basicAuth, function(req, res) {
   matchEngine.search({image_url: req.body.url}, function(err, data) {
     const response = data || err
     res.send(response)
