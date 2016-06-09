@@ -2,30 +2,46 @@
 
 A micro-service interface to [Tineye](https://www.tineye.com/)
 
-## Installation
-
-### Requirements
+## Requirements
 
 * Node.js >= 6.0.0
 * Redis
 
-### Local Development
+## Usage
+
+The required environment variables are listed in `.env.dev`. Set your custom
+environment variables and run the following:
+```
+npm i
+npm start
+```
+
+## Local Development
 
 Local development is very straightforward with Docker and Docker Compose. If using Docker w/ Docker Machine, replace `localhost` with the output of `docker-machine ip` in the commands below.
 
-#### Environment Variables
-The supported/required environment variables can be found in `.env.dev`. If using Docker Compose, put all local variables/values in `.env.local` (this file needs to exist for local development with Docker Compose, even if it is empty).
+### Environment Variables
 
-#### Running the app and querying the API
+The supported/required environment variables can be found in `.env.dev`. If
+using Docker Compose, put all custom values in `.env.local` (this file needs
+    to exist for local development with Docker Compose, even if it is empty).
+
+### Running the app
+
+With Docker Compose:
 ```
-# Setup and run the app with Docker Compose
 docker-compose run --rm node npm i
 docker-compose run --rm --service-ports node
+```
 
-# Setup and run the app without Docker
+Without Docker:
+```
 npm i
 npm start
+```
 
+Testing the API:
+```
 # Add an image
 curl -H "Content-Type: application/json" \
     -H "Authorization: Basic dXNlcm5hbWU6UEBzc3cwcmQ=" \
@@ -56,7 +72,7 @@ curl -X GET localhost:3000/api/photos/count
 curl -X GET localhost:3000/api/photos/ping
 ```
 
-### Testing
+## Testing
 ```
 docker-compose run --rm node npm test
 ```
