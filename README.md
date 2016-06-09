@@ -6,34 +6,56 @@ A micro-service interface to [Tineye](https://www.tineye.com/)
 
 ### Requirements
 
-Please make sure you have [Docker Toolbox](https://github.com/docker/toolbox/releases) installed before proceeding.
+* Node.js >= 6.0.0
+* Redis
 
 ### Local Development
 
+Local development is very straightforward with Docker and Docker Compose. If using Docker w/ Docker Machine, replace `localhost` with the output of `docker-machine ip` in the commands below.
+
+#### Environment Variables
+The supported/required environment variables can be found in `.env.dev`. If using Docker Compose, put all local variables/values in `.env.local` (this file needs to exist for local development with Docker Compose, even if it is empty).
+
 ```
-# Setup and run the app
+# Setup and run the app with Docker Compose
 docker-compose run --rm node npm i
 docker-compose run --rm --service-ports node
 
+# Setup and run the app without Docker
+npm i
+npm start
+
 # Add an image
 curl -H "Content-Type: application/json" \
+    -H "Authorization: Basic dXNlcm5hbWU6UEBzc3cwcmQ=" \
     -X POST \
-    -d '{"url":"http://tineye.com/images/meloncat.jpg","filepath":"meloncat.jpg"}' `docker-machine ip`:3000/photos/add
+    -d '{"url":"http://tineye.com/images/meloncat.jpg","filepath":"meloncat.jpg"}' localhost:3000/api/photos/add
 
 # Search for the added image
 curl -H "Content-Type: application/json" \
+    -H "Authorization: Basic dXNlcm5hbWU6UEBzc3cwcmQ=" \
     -X POST \
-    -d '{"image_url":"http://tineye.com/images/meloncat.jpg"}' `docker-machine ip`:3000/photos/search
+    -d '{"url":"http://tineye.com/images/meloncat.jpg"}' localhost:3000/api/photos/search
 
 # Delete the added image
 curl -H "Content-Type: application/json" \
+    -H "Authorization: Basic dXNlcm5hbWU6UEBzc3cwcmQ=" \
+    -X DELETE localhost:3000/api/photos/delete?filepath=meloncat.jpg
+
+# Compare two images
+curl -H "Content-Type: application/json" \
+    -H "Authorization: Basic dXNlcm5hbWU6UEBzc3cwcmQ=" \
     -X POST \
-    -d '{"filepath":"meloncat.jpg"}' `docker-machine ip`:3000/photos/delete
+    -d '{"url1":"http://tineye.com/images/meloncat.jpg","url2":"http://tineye.com/images/meloncat.jpg"}' localhost:3000/api/photos/compare
+
+# Get the image count of your index
+curl -X GET localhost:3000/api/photos/count
+
+# Get the status of the TinEye service
+curl -X GET localhost:3000/api/photos/ping
 ```
 
 ### Testing
 ```
 docker-compose run --rm node npm test
 ```
-
-# Contributing
