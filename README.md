@@ -16,6 +16,7 @@ Local development is very straightforward with Docker and Docker Compose. If usi
 #### Environment Variables
 The supported/required environment variables can be found in `.env.dev`. If using Docker Compose, put all local variables/values in `.env.local` (this file needs to exist for local development with Docker Compose, even if it is empty).
 
+#### Running the app and querying the API
 ```
 # Setup and run the app with Docker Compose
 docker-compose run --rm node npm i
