@@ -68,7 +68,7 @@ router.get('/ping', function(req, res) {
 
 /* Search the TinEye index for an image */
 router.post('/search', function(req, res) {
-  matchEngine.search({image_url: req.body.image_url}, function(err, data) {
+  matchEngine.search({image_url: req.body.url}, function(err, data) {
     const response = data || err
     res.send(response)
   })
