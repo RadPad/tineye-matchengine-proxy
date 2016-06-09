@@ -1,6 +1,6 @@
 # tineye-matchengine-proxy
 
-A micro-service interface to the [Tineye MatchEngine API](https://services.tineye.com/MatchEngine)
+A micro-service interface to the [TinEye MatchEngine API](https://services.tineye.com/MatchEngine)
 
 ## Requirements
 
