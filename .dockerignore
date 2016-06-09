@@ -2,3 +2,4 @@
 .env*
 .eslintrc
 .git
+newrelic_agent.log
