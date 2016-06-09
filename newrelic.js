@@ -7,7 +7,7 @@
  * description of configuration variables and their potential values.
  */
 exports.config = {
-  agent_enabled: process.env.NEWRELIC_ENABLED || false,
+  agent_enabled: (process.env.NEWRELIC_ENABLED === 'true') || false,
   app_name: process.env.NEWRELIC_APP_NAME || 'dev-radpad-tineye',
   license_key: process.env.NEWRELIC_LICENSE_KEY || 'license key here',
   logging: {
