@@ -34,6 +34,9 @@ router.post('/add', basicAuth, function(req, res) {
   job.on('complete', function(result) {
     res.send(result)
   })
+  job.on('failed', function(result) {
+    res.send({error: result})
+  })
 })
 
 /* Get the number of items currently in the collection */
