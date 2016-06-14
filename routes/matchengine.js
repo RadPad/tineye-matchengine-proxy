@@ -14,15 +14,7 @@ router.get('/alive', function(req, res) {
 
 /* Add a photo to the TinEye index */
 router.post('/add', basicAuth, function(req, res) {
-  const data = {
-    id: '',
-    url: req.body.url,
-    filepath: req.body.filepath,
-    queued: Date.now(),
-    processed: null,
-    response: {}
-  }
-  queue.add(data)
+  queue.add(req.body.url, req.body.filepath)
     .on('complete', function(result) {
       res.send(result)
     })
@@ -46,14 +38,7 @@ router.post('/compare', basicAuth, function(req, res) {
 
 /* Delete an image from the TinEye index */
 router.delete('/delete', basicAuth, function(req, res) {
-  const data = {
-    id: '',
-    filepath: req.query.filepath,
-    queued: Date.now(),
-    processed: null,
-    response: {}
-  }
-  queue.delete(data)
+  queue.delete(req.query.filepath)
     .on('complete', function(result) {
       res.send(result)
     })
