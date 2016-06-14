@@ -20,17 +20,17 @@ router.post('/add', basicAuth, function(req, res) {
     })
 })
 
-/* Get the number of items currently in the collection */
-router.get('/count', function(req, res) {
-  queue.count(function(err, data) {
+/* Compare two images and return the match score (if any) */
+router.post('/compare', basicAuth, function(req, res) {
+  queue.compare({url1: req.body.url1, url2: req.body.url2}, function(err, data) {
     const response = data || err
     res.send(response)
   })
 })
 
-/* Compare two images and return the match score (if any) */
-router.post('/compare', basicAuth, function(req, res) {
-  queue.compare({url1: req.body.url1, url2: req.body.url2}, function(err, data) {
+/* Get the number of items currently in the collection */
+router.get('/count', function(req, res) {
+  queue.count(function(err, data) {
     const response = data || err
     res.send(response)
   })
