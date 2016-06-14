@@ -2,7 +2,7 @@ version: "2"
 
 services:
   node:
-    image: node:6.0.0
+    image: node:6.2.1
     env_file:
         - .env.dev
         - .env.local
