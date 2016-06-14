@@ -1,10 +1,8 @@
-const express = require('express')
-const router = express.Router()
 const auth = require('basicauth-middleware')
 const basicAuth = auth(process.env.HTTP_USERNAME, process.env.HTTP_PASSWORD)
-
-const MatchEngineQueue = require('../lib/matchengine_queue.js')
-const queue = new MatchEngineQueue()
+const express = require('express')
+const queue = require('../lib/matchengine_queue.js')
+const router = express.Router()
 
 router.get('/', function(req, res) {
   res.send('~(=^‥^)_旦~ < tineye tea time?')
