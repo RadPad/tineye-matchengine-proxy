@@ -3,15 +3,8 @@ const router = express.Router()
 const auth = require('basicauth-middleware')
 const basicAuth = auth(process.env.HTTP_USERNAME, process.env.HTTP_PASSWORD)
 
-const {MatchEngine} = require('tineye-matchengine')
-const matchEngine = new MatchEngine(
-  process.env.TINEYE_USERNAME,
-  process.env.TINEYE_PASSWORD,
-  process.env.TINEYE_BASE_URL
-)
-
-const TinEyeAddQueue = require('../lib/tineye_add_queue.js')
-const queue = new TinEyeAddQueue(matchEngine)
+const MatchEngineQueue = require('../lib/matchengine_queue.js')
+const queue = new MatchEngineQueue()
 
 router.get('/', function(req, res) {
   res.send('~(=^‥^)_旦~ < tineye tea time?')
@@ -24,21 +17,22 @@ router.get('/alive', function(req, res) {
 /* Add a photo to the TinEye index */
 router.post('/add', basicAuth, function(req, res) {
   const data = {
+    id: '',
     url: req.body.url,
     filepath: req.body.filepath,
     queued: Date.now(),
     processed: null,
     response: {}
   }
-  const job = queue.add(data)
-  job.on('complete', function(result) {
-    res.send(result)
-  })
+  queue.add(data)
+    .on('complete', function(result) {
+      res.send(result)
+    })
 })
 
 /* Get the number of items currently in the collection */
 router.get('/count', function(req, res) {
-  matchEngine.count(function(err, data) {
+  queue.count(function(err, data) {
     const response = data || err
     res.send(response)
   })
@@ -46,7 +40,7 @@ router.get('/count', function(req, res) {
 
 /* Compare two images and return the match score (if any) */
 router.post('/compare', basicAuth, function(req, res) {
-  matchEngine.compare({url1: req.body.url1, url2: req.body.url2}, function(err, data) {
+  queue.compare({url1: req.body.url1, url2: req.body.url2}, function(err, data) {
     const response = data || err
     res.send(response)
   })
@@ -54,15 +48,22 @@ router.post('/compare', basicAuth, function(req, res) {
 
 /* Delete an image from the TinEye index */
 router.delete('/delete', basicAuth, function(req, res) {
-  matchEngine.delete({filepath: req.query.filepath}, function(err, data) {
-    const response = data || err
-    res.send(response)
-  })
+  const data = {
+    id: '',
+    filepath: req.query.filepath,
+    queued: Date.now(),
+    processed: null,
+    response: {}
+  }
+  queue.delete(data)
+    .on('complete', function(result) {
+      res.send(result)
+    })
 })
 
 /* Check whether the MatchEngine search server is running */
 router.get('/ping', function(req, res) {
-  matchEngine.ping(function(err, data) {
+  queue.ping(function(err, data) {
     const response = data || err
     res.send(response)
   })
@@ -70,7 +71,7 @@ router.get('/ping', function(req, res) {
 
 /* Search the TinEye index for an image */
 router.post('/search', basicAuth, function(req, res) {
-  matchEngine.search({image_url: req.body.url}, function(err, data) {
+  queue.search({image_url: req.body.url}, function(err, data) {
     const response = data || err
     res.send(response)
   })
