@@ -17,7 +17,7 @@ services:
     command: npm start
 
   redis:
-    image: redis
+    image: redis:alpine
 
 volumes:
   node_modules:
