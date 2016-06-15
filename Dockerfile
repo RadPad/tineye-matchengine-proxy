@@ -5,6 +5,6 @@ EXPOSE 3000
 
 ADD . /usr/src/app
 WORKDIR /usr/src/app
-RUN npm i
+RUN npm i --production
 
 CMD ["npm", "start"]

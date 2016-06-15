@@ -1,6 +1,6 @@
 {
-  "name": "tineye-proxy",
-  "version": "0.0.0",
+  "name": "tineye-matchengine-proxy",
+  "version": "0.2.1",
   "private": true,
   "scripts": {
     "clean": "rm -rf ./node_modules/*",
@@ -16,7 +16,7 @@
     "jade": "~1.11.0",
     "kue": "^0.11.0",
     "morgan": "~1.6.1",
-    "newrelic": "^1.28.0",
+    "newrelic": "^1.28.1",
     "tineye-matchengine": "0.0.1"
   },
   "devDependencies": {
