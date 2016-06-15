@@ -1,4 +1,4 @@
-FROM node:6.0.0
+FROM node:6.2.1
 MAINTAINER Michael Clifford <cliff@onradpad.com>
 
 EXPOSE 3000
