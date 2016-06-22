@@ -5,7 +5,7 @@ const queue = require('../lib/matchengine_queue.js')
 const router = express.Router()
 
 router.get('/', function(req, res) {
-  res.send('~(=^‥^)_旦~ < matchengine tea time?')
+  res.send('~(=^‥^)_旦~ < tineye tea time?')
 })
 
 router.get('/alive', function(req, res) {
